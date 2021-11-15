@@ -22,3 +22,37 @@ a {
 .bold {
     font-weight: bold;
 }
+
+.page-content {
+    width: calc(100% - 262px);
+    padding-left: 42px;
+}
+
+.with-bg {
+    background-image: url("/pattern-left.svg"), url("/pattern-right.svg");
+    background-size: 46%, 50%;
+    background-repeat: no-repeat, no-repeat;
+    background-position: top 20px left 8px, bottom 0 right -8px;
+    z-index: 0;
+}
+
+p {
+    line-height: 28px;
+    margin-bottom: 16 px;
+}
+
+li {
+    margin-top: 16px;
+}
+
+ol li {
+    margin-bottom: 16 px;
+}
+
+.doc-main-title {
+    font-size: 48px;
+    text-align: center;
+    color: #333;
+    margin-bottom: 40px;
+    margin-top: 0;
+}
