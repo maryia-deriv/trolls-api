@@ -1,5 +1,5 @@
 import DocsLayout from "components/Documentation/Layout/DocsLayout";
-import QuickStartIntro from "components/Documentation/QuickStart/QuickStart";
+import QuickStartIntro from "components/Documentation/QuickStartIntro/QuickStartIntro";
 
 type PageComponentWithLayout = React.FC & {
     Layout: React.FC;

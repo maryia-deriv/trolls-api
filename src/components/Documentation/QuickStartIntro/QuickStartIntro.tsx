@@ -1,12 +1,8 @@
-import React from "react";
+import Link from "next/link";
 import { PATHS } from "utils";
-import styles from "./QuickStart.module.scss";
+import styles from "./QuickStartIntro.module.scss";
 
-type QuickStartIntroPropsType = {
-    // props
-};
-
-const QuickStartIntro: React.FC<QuickStartIntroPropsType> = () => (
+const QuickStartIntro: React.FC = () => (
     <>
         <h1 className={styles["doc-main-title"]}>Quickstart to Deriv API</h1>
         <div className={styles["quick-start-intro"]}>
@@ -20,7 +16,11 @@ const QuickStartIntro: React.FC<QuickStartIntroPropsType> = () => (
             <h3 className={`${styles["api-sub-title"]} bold`}>Before you begin</h3>
             <ul className="bullet">
                 <li>
-                    Open a <a href="https://deriv.com/">Deriv account</a> (either a demo or real account).
+                    Open a{" "}
+                    <Link href="https://deriv.com/">
+                        <a>Deriv account</a>
+                    </Link>{" "}
+                    (either a demo or real account).
                 </li>
                 <li>
                     Create a new token using the <a href="https://app.deriv.com/account/api-token">admin scope</a>.
