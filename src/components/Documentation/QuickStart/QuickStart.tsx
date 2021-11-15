@@ -26,7 +26,8 @@ const QuickStartIntro: React.FC<QuickStartIntroPropsType> = () => (
                     Create a new token using the <a href="https://app.deriv.com/account/api-token">admin scope</a>.
                 </li>
                 <li>
-                    Register your app to receive your <b>app_id</b> or use <b>app_id 1089</b> to test Deriv API.
+                    Register your app to receive your <strong>app_id</strong> or use <strong>app_id 1089</strong> to
+                    test Deriv API.
                 </li>
             </ul>
             <h3 className={`${styles["api-sub-title"]} bold`}>Setting up your environment</h3>
