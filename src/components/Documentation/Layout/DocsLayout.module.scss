@@ -4,7 +4,6 @@
     }
 }
 
-
 .doc-content {
     flex-direction: column;
     padding: 75px 16px 40px;
@@ -13,20 +12,24 @@
     justify-content: unset;
 
     .page-wrapper {
-      width: 100% !important;
+        width: 100% !important;
+        .page-content {
+            width: 100%;
+            padding-left: 42px;
+        }
     }
 }
 
 #content > .documentation {
     width: 80%;
     margin-top: 20px;
-  
+
     @media (max-width: 1300px) {
-      width: 90%;
+        width: 90%;
     }
-  
+
     @media (max-width: 1164px) {
-      width: 95%;
+        width: 95%;
     }
 }
 
