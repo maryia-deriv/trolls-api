@@ -3,11 +3,9 @@ import { render, screen } from "@testing-library/react";
 import Home from "../pages/index";
 
 describe("Home", () => {
-    it("renders a heading", () => {
-        render(<Home />);
+    it("Home page is rendered", () => {
+        const result = render(<Home />);
 
-        const heading = screen.getByText("Good luck trolls!");
-
-        expect(heading).toBeInTheDocument();
+        expect(result.container.querySelector("#home-page")).toBeInTheDocument();
     });
 });
