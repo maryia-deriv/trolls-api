@@ -22,7 +22,7 @@ const CanvasMenu: React.FC<CanvasMenuPropsType> = ({ is_canvas_menu_shown, toggl
     const [is_dropdown_shown, setIsDropDownShown] = useState(false);
 
     const onLinkClick: MouseEventHandler<HTMLElement> = (e) => {
-        if ((e.target as HTMLElement).nodeName === "A") {
+        if ((e.target as HTMLAnchorElement).nodeName === "A") {
             toggleCanvasMenu(false);
         };
     };
