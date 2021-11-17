@@ -13,115 +13,108 @@
         left: -254px;
         z-index: 1;
 
-        .menu-container {
+        .menu-wrapper {
             display: flex;
             flex-direction: column;
-            height: 100%;
-            padding: 24px 16px 24px 20px;
+            justify-content: center;
+            min-height: 40px;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 8px;
 
-            .menu-wrapper {
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                min-height: 40px;
-                font-size: 14px;
-                font-weight: bold;
+            &:before {
+                content: "";
+                position: absolute;
+                left: 16px;
+                width: 4px;
+                height: 0;
+                background-color: red;
+                visibility: hidden;
+                transition: all 0.2s ease-in-out;
+                border-top-left-radius: 4px;
+                border-bottom-left-radius: 4px;
+            }
+
+            a {
+                color: #000000;
+                padding: 10px 16px;
+            }
+
+            .menu-header {
+                display: inline-flex;
+                padding: 10px 16px;
                 margin-bottom: 8px;
-
-                &:before {
-                    content: "";
-                    position: absolute;
-                    left: 16px;
-                    width: 4px;
-                    height: 0;
-                    background-color: red;
-                    visibility: hidden;
-                    transition: all 0.2s ease-in-out;
-                    border-top-left-radius: 4px;
-                    border-bottom-left-radius: 4px;
-                }
 
                 a {
                     color: #000000;
-                    padding: 10px 16px;
                 }
 
-                .menu-header {
-                    display: inline-flex;
-                    padding: 10px 16px;
-                    margin-bottom: 8px;
-
-                    a {
-                        color: #000000;
-                    }
-
-                    .menu-button {
-                        margin-left: auto;
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                    }
+                .menu-button {
+                    margin-left: auto;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
                 }
+            }
 
-                .menu-panel {
-                    display: none;
-                    height: 0;
-                    padding: 0px 16px 10px;
-                    transition: all 0.5s ease;
+            .menu-panel {
+                display: none;
+                height: 0;
+                padding: 0px 16px 10px;
+                transition: all 0.5s ease;
 
-                    a {
-                        display: flex;
-                        align-items: center;
-                        justify-content: flex-start;
-                        color: #636363;
-                        padding-left: 8px;
-                        margin-bottom: 6px;
-                        font-size: 14px;
-                        font-weight: normal;
-
-                        &:before {
-                            content: "";
-                            position: absolute;
-                            left: 32px;
-                            width: 4px;
-                            height: 0;
-                            background-color: red;
-                            visibility: hidden;
-                            transition: all 0.2s ease-in-out;
-                            border-top-left-radius: 4px;
-                            border-bottom-left-radius: 4px;
-                        }
-                    }
-
-                    .selected {
-                        background-color: rgba(240, 241, 243, 0.64);
-                        border-radius: 4px;
-                        font-weight: bold;
-                        opacity: 1;
-
-                        &::before {
-                            visibility: visible;
-                            height: 40px;
-                        }
-                    }
-                }
-
-                .show-dropdown {
+                &.show-dropdown {
                     display: flex;
                     flex-direction: column;
                     height: auto;
                 }
-            }
 
-            .selected {
-                background-color: rgba(240, 241, 243, 0.64);
-                border-radius: 4px;
-                opacity: 1;
+                a {
+                    display: flex;
+                    align-items: center;
+                    justify-content: flex-start;
+                    color: #636363;
+                    padding-left: 8px;
+                    margin-bottom: 6px;
+                    font-size: 14px;
+                    font-weight: normal;
 
-                &::before {
-                    visibility: visible;
-                    height: 40px;
+                    &:before {
+                        content: "";
+                        position: absolute;
+                        left: 32px;
+                        width: 4px;
+                        height: 0;
+                        background-color: red;
+                        visibility: hidden;
+                        transition: all 0.2s ease-in-out;
+                        border-top-left-radius: 4px;
+                        border-bottom-left-radius: 4px;
+                    }
                 }
+
+                .selected {
+                    background-color: rgba(240, 241, 243, 0.64);
+                    border-radius: 4px;
+                    font-weight: bold;
+                    opacity: 1;
+
+                    &::before {
+                        visibility: visible;
+                        height: 40px;
+                    }
+                }
+            }
+        }
+
+        .selected {
+            background-color: rgba(240, 241, 243, 0.64);
+            border-radius: 4px;
+            opacity: 1;
+
+            &::before {
+                visibility: visible;
+                height: 40px;
             }
         }
     }

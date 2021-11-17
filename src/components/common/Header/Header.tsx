@@ -1,9 +1,9 @@
-import React, { MouseEventHandler } from "react";
+import useIsMobile from "hooks/useIsMobile";
 import Image from "next/image";
 import Link from "next/link";
-import useIsMobile from "hooks/useIsMobile";
-import styles from "./Header.module.scss";
+import React, { MouseEventHandler } from "react";
 import { PATHS } from "utils";
+import styles from "./Header.module.scss";
 
 type HeaderPropsType = {
     is_canvas_menu_shown: boolean;
@@ -27,7 +27,6 @@ const Header: React.FC<HeaderPropsType> = ({ is_canvas_menu_shown, toggleCanvasM
 
     const handleHamburgerClick: MouseEventHandler<HTMLDivElement> = e => {
         toggleCanvasMenu(!is_canvas_menu_shown);
-        
     };
 
     return (

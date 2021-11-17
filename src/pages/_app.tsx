@@ -1,12 +1,12 @@
-import "styles/globals.scss";
+import CanvasMenu from "components/common/CanvasMenu/CanvasMenu";
+import Footer from "components/common/Footer";
+import Header from "components/common/Header/Header";
 import type { AppProps } from "next/app";
 import Head from "next/head";
 import { useState } from "react";
+import "styles/globals.scss";
 import "../../src/styles/prism-theme.css";
-import Header from "components/common/Header/Header";
-import Footer from "components/common/Footer";
 import { PageComponentWithLayout } from "../types";
-import CanvasMenu from "components/common/CanvasMenu/CanvasMenu";
 
 const EmptyLayout: React.FC = ({ children }) => <>{children}</>;
 
@@ -29,7 +29,7 @@ const MyApp = ({ Component, pageProps }: MyApp) => {
                 <link rel="icon" href="/deriv.png" />
             </Head>
             <Header is_canvas_menu_shown={is_canvas_menu_shown} toggleCanvasMenu={setIsCanvasMenuShown} />
-            <CanvasMenu is_canvas_menu_shown={is_canvas_menu_shown} />
+            <CanvasMenu is_canvas_menu_shown={is_canvas_menu_shown} toggleCanvasMenu={setIsCanvasMenuShown} />
             <div className="main-content" onClick={() => setIsCanvasMenuShown(false)}>
                 <Layout>
                     <Component {...pageProps} />
