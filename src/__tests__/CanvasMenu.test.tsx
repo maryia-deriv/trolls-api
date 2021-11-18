@@ -12,7 +12,7 @@ describe("CanvasMenu", () => {
     it("CanvasMenu component is hidden", () => {
         const result = render(<CanvasMenu is_canvas_menu_shown={false} toggleCanvasMenu={() => {}} />);
 
-        expect(result.container.querySelector("#canvas-menu")).not.toHaveClass(".show-canvas");
-        expect(result.container.querySelector(".menu-panel")).not.toHaveClass(".show-dropdown");
+        expect(result.container.querySelector("#canvas-menu")).not.toHaveClass("off-canvas-menu show-canvas");
+        expect(result.container.querySelector(".menu-panel")).not.toHaveClass("menu-panel show-dropdown");
     });
 });
