@@ -19,7 +19,7 @@ const navigation = [
     { id: "playground", title: "API Playground", path: PATHS.PLAYGROUND },
 ];
 
-const Header: React.FC<HeaderPropsType> = ({ is_canvas_menu_shown, toggleCanvasMenu }) => {
+const Header: React.FC<HeaderPropsType> = React.memo(({ is_canvas_menu_shown, toggleCanvasMenu }) => {
     const is_mobile = useIsMobile();
     const image_width = is_mobile ? 84 : 180;
     const image_height = is_mobile ? 34 : 73;
@@ -70,6 +70,8 @@ const Header: React.FC<HeaderPropsType> = ({ is_canvas_menu_shown, toggleCanvasM
             </header>
         </div>
     );
-};
+});
+
+Header.displayName = "Header";
 
 export default Header;

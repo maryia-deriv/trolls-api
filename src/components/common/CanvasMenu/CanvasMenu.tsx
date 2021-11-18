@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { MouseEventHandler, useState } from "react";
+import React, { MouseEventHandler } from "react";
 import { PATHS } from "utils";
 import styles from "./CanvasMenu.module.scss";
 
@@ -18,13 +18,13 @@ const canvas_menu_links = [
     { id: "bug-bounty", title: "Bug Bounty", path: PATHS.BUG_BOUNTY },
 ];
 
-const CanvasMenu: React.FC<CanvasMenuPropsType> = ({ is_canvas_menu_shown, toggleCanvasMenu }) => {
-    const [is_dropdown_shown, setIsDropDownShown] = useState(false);
+const CanvasMenu: React.FC<CanvasMenuPropsType> = React.memo(({ is_canvas_menu_shown, toggleCanvasMenu }) => {
+    const [is_dropdown_shown, setIsDropDownShown] = React.useState(false);
 
-    const onLinkClick: MouseEventHandler<HTMLElement> = (e) => {
+    const onLinkClick: MouseEventHandler<HTMLElement> = e => {
         if ((e.target as HTMLAnchorElement).nodeName === "A") {
             toggleCanvasMenu(false);
-        };
+        }
     };
 
     return (
@@ -39,7 +39,11 @@ const CanvasMenu: React.FC<CanvasMenuPropsType> = ({ is_canvas_menu_shown, toggl
                 </Link>
             </div>
             <div className={styles["menu-wrapper"]}>
-                <div id="doc-menu-header" className={styles["menu-header"]} onClick={() => setIsDropDownShown(!is_dropdown_shown)}>
+                <div
+                    id="doc-menu-header"
+                    className={styles["menu-header"]}
+                    onClick={() => setIsDropDownShown(!is_dropdown_shown)}
+                >
                     Documentation
                     <div className={styles["menu-button"]}>
                         <Image src="/arrow_down.svg" width="16" height="16" alt="expand" />
@@ -60,6 +64,8 @@ const CanvasMenu: React.FC<CanvasMenuPropsType> = ({ is_canvas_menu_shown, toggl
             </div>
         </section>
     );
-};
+});
+
+CanvasMenu.displayName = "CanvasMenu";
 
 export default CanvasMenu;

@@ -44,8 +44,8 @@ const QuickStartIntro: React.FC = () => (
             </p>
             <h3 className={`${styles["api-sub-title"]} bold`}>Before you begin</h3>
             <ul className="bullet">
-                {quick_start_steps.map((item, index) => (
-                    <li key={index}>{item}</li>
+                {quick_start_steps.map((step, i) => (
+                    <li key={i}>{step}</li>
                 ))}
             </ul>
             <h3 className={`${styles["api-sub-title"]} bold`}>Setting up your environment</h3>
