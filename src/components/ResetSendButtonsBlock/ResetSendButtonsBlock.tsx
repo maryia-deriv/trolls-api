@@ -21,15 +21,14 @@ export const ResetSendButtonsBlock: React.FC<ResetSendButtonsBlockPropsType> = R
         return (
             <div className={style["json-btn-wrapper"]}>
                 <div
+                    id="playground-reset-btn"
                     className={
                         isAppRegistration
                             ? `${style["btn-reset"]} ${style["gray-btn-submit"]}`
                             : `${style["btn-reset"]} ${style["btn-reset-playground"]}`
                     }
                 >
-                    <div id="playground-reset-btn">
-                        <Button text={"Reset Connection"} clickHandler={onClick} />
-                    </div>
+                    <Button text={"Reset Connection"} clickHandler={onClick} />
                 </div>
                 <div className={style["btn-submit"]}>
                     <Button
