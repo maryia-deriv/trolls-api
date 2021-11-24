@@ -7,13 +7,14 @@ import style from "./ResetSendButtonsBlock.module.scss";
 type ResetSendButtonsBlockPropsType = {
     isAppRegistration: boolean | undefined;
     sendRequest: React.MouseEventHandler<HTMLButtonElement>;
-    resetMessagesInConsole: (messages: MessageType[]) => void;
+    resetMessagesInConsole: (messages: Array<MessageType>) => void;
 };
 
 export const ResetSendButtonsBlock: React.FC<ResetSendButtonsBlockPropsType> = React.memo(
     ({ isAppRegistration, sendRequest, resetMessagesInConsole }) => {
         const onClick = React.useCallback(() => {
             api.connection.close();
+            localStorage.removeItem("token");
             resetMessagesInConsole([]);
         }, [resetMessagesInConsole]);
 

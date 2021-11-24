@@ -18,18 +18,22 @@ export type MessageType = {
 };
 
 const RequestJSONBox: React.FC<RequestJSONBoxPropTypes> = ({ request_example, handleChange, isAppRegistration }) => {
-    const [messages, setMessages] = useState<MessageType[]>([]);
+    const [messages, setMessages] = useState<Array<MessageType>>([]);
     const request_input = useRef<HTMLTextAreaElement>(null);
     const sendRequest = React.useCallback(() => {
+        if (!request_input.current?.value) {
+            alert("Invalid JSON!");
+            return;
+        }
         const request = request_input.current?.value && JSON.parse(request_input.current?.value);
-        const api_instance = api.connection.readyState !== 1 ? generateDerivApiInstance() : api;
+        const api_instance = api.connection.readyState === 1 ? api : generateDerivApiInstance();
         request &&
             api_instance
                 .send(request)
-                .then((res: any) =>
+                .then((res: string) =>
                     setMessages([...messages, { body: request, type: "req" }, { body: res, type: "res" }])
                 )
-                .catch((err: any) =>
+                .catch((err: string) =>
                     setMessages([...messages, { body: request, type: "req" }, { body: err, type: "err" }])
                 );
     }, [request_input, messages]);
