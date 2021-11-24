@@ -16,35 +16,32 @@ const highlightObject = (object: any, default_indentation = "", default_depth = 
             <span>{open_bracket}</span>
             {keys?.map((key, index) => {
                 const type = typeof object[key];
-                const is_last = keys.length === index+1;
+                const is_last = keys.length === index + 1;
 
                 return (
-                    <span key={key+depth}>
+                    <span key={key + depth}>
                         <span>{indentation}</span>
                         {!is_array && <span className={style["key"]}>{`"${key}"`}</span>}
                         {!is_array && <>{separation_colon}</>}
-                        {type === "object"
-                            ? highlightObject(object[key], indentation)
-                            : <span className={style[type]}>{type === "number" ? object[key] : `"${object[key]}"`}</span>
-                        }
-                        <>{is_last ? end_line : ","+end_line}</>
+                        {type === "object" ? (
+                            highlightObject(object[key], indentation)
+                        ) : (
+                            <span className={style[type]}>{type === "number" ? object[key] : `"${object[key]}"`}</span>
+                        )}
+                        <>{is_last ? end_line : "," + end_line}</>
                     </span>
-                )
+                );
             })}
             <>{default_indentation.length ? default_indentation : ""}</>
             <span>{close_bracket}</span>
         </>
-    )
-}
+    );
+};
 
 const ConsoleMessage: React.FC<{ message: any }> = ({ message }) => {
-    const payload = message.body;
+    const payload = message.body || "";
 
-    return (
-        <pre className={style[message.type]}>
-            {message && highlightObject(payload)}
-        </pre>
-    )
-}
+    return <pre className={style[message.type]}>{message && highlightObject(payload)}</pre>;
+};
 
 export default ConsoleMessage;

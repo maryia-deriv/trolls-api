@@ -1,4 +1,4 @@
-import { api } from "appid";
+import { api, generateDerivApiInstance } from "appid";
 import Title from "components/common/Title";
 import ConsoleMessage from "components/ConsoleMessage/ConsoleMessage";
 import { ResetSendButtonsBlock } from "components/ResetSendButtonsBlock/ResetSendButtonsBlock";
@@ -12,7 +12,7 @@ type RequestJSONBoxPropTypes = {
     isAppRegistration?: boolean;
 };
 
-type MessageType = {
+export type MessageType = {
     body: string;
     type: string;
 };
@@ -20,10 +20,11 @@ type MessageType = {
 const RequestJSONBox: React.FC<RequestJSONBoxPropTypes> = ({ request_example, handleChange, isAppRegistration }) => {
     const [messages, setMessages] = useState<MessageType[]>([]);
     const request_input = useRef<HTMLTextAreaElement>(null);
-    const sendRequest = () => {
+    const sendRequest = React.useCallback(() => {
         const request = request_input.current?.value && JSON.parse(request_input.current?.value);
+        const api_instance = api.connection.readyState !== 1 ? generateDerivApiInstance() : api;
         request &&
-            api
+            api_instance
                 .send(request)
                 .then((res: any) =>
                     setMessages([...messages, { body: request, type: "req" }, { body: res, type: "res" }])
@@ -31,7 +32,7 @@ const RequestJSONBox: React.FC<RequestJSONBoxPropTypes> = ({ request_example, ha
                 .catch((err: any) =>
                     setMessages([...messages, { body: request, type: "req" }, { body: err, type: "err" }])
                 );
-    };
+    }, [request_input, messages]);
 
     return (
         <div className={isAppRegistration ? style["form-content"] : style["playground-box"]}>
@@ -55,12 +56,18 @@ const RequestJSONBox: React.FC<RequestJSONBoxPropTypes> = ({ request_example, ha
                 onChange={handleChange}
                 spellCheck={isAppRegistration ? false : undefined}
             />
-            <ResetSendButtonsBlock isAppRegistration={isAppRegistration} sendRequest={sendRequest} />
-            <div id="playground-console" className={styles["playground-console"]}>
-                {messages?.map((message, index) => (
-                    <ConsoleMessage key={"message" + index} message={message}></ConsoleMessage>
-                ))}
-            </div>
+            <ResetSendButtonsBlock
+                isAppRegistration={isAppRegistration}
+                sendRequest={sendRequest}
+                resetMessagesInConsole={setMessages}
+            />
+            {messages && (
+                <div id="playground-console" className={styles["playground-console"]}>
+                    {messages?.map((message, index) => (
+                        <ConsoleMessage key={"message" + index} message={message}></ConsoleMessage>
+                    ))}
+                </div>
+            )}
         </div>
     );
 };

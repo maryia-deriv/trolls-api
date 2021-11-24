@@ -3,13 +3,7 @@ import DerivAPIBasic from "@deriv/deriv-api/dist/DerivAPIBasic";
 
 const isBrowser = typeof window !== "undefined";
 
-let is_connected_before = false;
-
-export const getIsConnectedBefore = () => {
-    return is_connected_before;
-};
-
-const generateDerivApiInstance = () => {
+export const generateDerivApiInstance = () => {
     if (!isBrowser) return;
 
     const server = "frontend.binaryws.com";
@@ -22,13 +16,6 @@ const generateDerivApiInstance = () => {
 
     const api = new DerivAPIBasic({
         connection: deriv_socket,
-    });
-
-    api.onOpen(() => {
-        is_connected_before = true;
-    });
-    api.onClose(() => {
-        is_connected_before = false;
     });
 
     return api;
