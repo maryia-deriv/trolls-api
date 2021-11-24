@@ -2,7 +2,7 @@ import { api } from "appid";
 import Title from "components/common/Title";
 import ConsoleMessage from "components/ConsoleMessage/ConsoleMessage";
 import { ResetSendButtonsBlock } from "components/ResetSendButtonsBlock/ResetSendButtonsBlock";
-import React, { useCallback, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import styles from "../../pages/playground/Playground.module.scss";
 import style from "./RequestJSONBox.module.scss";
 
@@ -20,8 +20,8 @@ type MessageType = {
 const RequestJSONBox: React.FC<RequestJSONBoxPropTypes> = ({ request_example, handleChange, isAppRegistration }) => {
     const [messages, setMessages] = useState<MessageType[]>([]);
     const request_input = useRef<HTMLTextAreaElement>(null);
-    const sendRequest = useCallback(() => {
-        const request = request_input.current && JSON.parse(request_input.current?.value);
+    const sendRequest = () => {
+        const request = request_input.current?.value && JSON.parse(request_input.current?.value);
         request &&
             api
                 .send(request)
@@ -31,7 +31,7 @@ const RequestJSONBox: React.FC<RequestJSONBoxPropTypes> = ({ request_example, ha
                 .catch((err: any) =>
                     setMessages([...messages, { body: request, type: "req" }, { body: err, type: "err" }])
                 );
-    }, [request_input, messages]);
+    };
 
     return (
         <div className={isAppRegistration ? style["form-content"] : style["playground-box"]}>
