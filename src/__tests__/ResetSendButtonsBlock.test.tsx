@@ -5,7 +5,12 @@ import React from "react";
 describe("ResetSendButtonsBlock", () => {
     it("ResetSendButtonsBlock component is rendered on API Playground page", () => {
         const result = render(
-            <ResetSendButtonsBlock isAppRegistration={false} sendRequest={() => {}} resetMessagesInConsole={() => {}} />
+            <ResetSendButtonsBlock
+                isAppRegistration={false}
+                sendRequest={() => {}}
+                resetMessagesInConsole={() => {}}
+                current_api={null}
+            />
         );
 
         expect(result.container.querySelector(".json-btn-wrapper")).toBeInTheDocument();
@@ -14,7 +19,12 @@ describe("ResetSendButtonsBlock", () => {
     });
     it("ResetSendButtonsBlock component is rendered on App Registration page", () => {
         const result = render(
-            <ResetSendButtonsBlock isAppRegistration sendRequest={() => {}} resetMessagesInConsole={() => {}} />
+            <ResetSendButtonsBlock
+                isAppRegistration
+                sendRequest={() => {}}
+                resetMessagesInConsole={() => {}}
+                current_api={null}
+            />
         );
 
         expect(result.container.querySelector(".json-btn-wrapper")).toBeInTheDocument();
