@@ -20,11 +20,11 @@ const PlayGround: React.FC = () => {
     const request_input = useRef<HTMLTextAreaElement>(null);
     const [selected_value, setSelectedValue] = useState<string>("Select API Call - Version 3");
     const [request, setRequest] = useState("");
-    const [token, setToken] = useState<string | null>("");
+    const [token, setToken] = useState<string>("");
 
     useEffect(() => {
         const _token = localStorage.getItem("token");
-        setToken(_token);
+        setToken(() => (_token === null ? "" : _token));
     }, []);
 
     const sendRequest = React.useCallback(() => {
