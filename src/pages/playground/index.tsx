@@ -28,7 +28,7 @@ const PlayGround: React.FC = () => {
     }, []);
 
     const sendRequest = React.useCallback(() => {
-        if (!request_input.current?.value && selected_value !== "Select API Call - Version 3") {
+        if (!request_input.current?.value && selected_value === "Select API Call - Version 3") {
             alert("Invalid JSON!");
             return;
         }
@@ -85,6 +85,16 @@ const PlayGround: React.FC = () => {
 
     const handleTextAreaInput: React.ChangeEventHandler<HTMLTextAreaElement> = e => setRequest(e.target.value);
 
+    const json_box_props = {
+        current_api,
+        sendRequest,
+        messages,
+        setMessages,
+        request_example: request,
+        handleChange: handleTextAreaInput,
+        request_input,
+    };
+
     return (
         <div id="content" className={`${style["playground-content"]} ${style.dark}`}>
             <div className={style["header-title"]}>
@@ -107,15 +117,7 @@ const PlayGround: React.FC = () => {
                                     <div className={style["cta-button"]}>{data_get_api_token.button}</div>
                                 </div>
                             </div>
-                            <RequestJSONBox
-                                current_api={current_api}
-                                sendRequest={sendRequest}
-                                messages={messages}
-                                setMessages={setMessages}
-                                request_example={request}
-                                handleChange={handleTextAreaInput}
-                                request_input={request_input}
-                            />
+                            <RequestJSONBox {...json_box_props} />
                         </div>
                         <div id="playground" className={style["playground-api-docs"]}>
                             <div id="playground-req-schema"></div>
