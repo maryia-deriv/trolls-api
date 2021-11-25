@@ -5,7 +5,7 @@ import style from "./TokenInputField.module.scss";
 type TokenInputFieldPropsType = {
     isAppRegistration?: boolean;
     label?: string;
-    sendTokenToJSON: (token: string) => void;
+    sendTokenToJSON?: (token: string) => void; // will be required later
 };
 
 const TokenInputField: React.FC<TokenInputFieldPropsType> = ({ isAppRegistration, label, sendTokenToJSON }) => {
@@ -27,7 +27,7 @@ const TokenInputField: React.FC<TokenInputFieldPropsType> = ({ isAppRegistration
                     id="send-auth-manually-btn"
                     className={`${style["btn-authenticate"]} ${style.bold}`}
                     text="Authenticate"
-                    clickHandler={() => sendTokenToJSON(token)}
+                    clickHandler={() => sendTokenToJSON?.(token)}
                 />
             </div>
         </fieldset>

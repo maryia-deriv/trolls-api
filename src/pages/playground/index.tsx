@@ -9,7 +9,7 @@ import TokenInputField from "../../components/TokenInputField/TokenInputField";
 import style from "./Playground.module.scss";
 
 export type MessageType = {
-    body: string;
+    body: string | Error | {};
     type: string;
 };
 
@@ -18,10 +18,9 @@ const PlayGround: React.FC = () => {
     const [is_initial_socket, setIsInitialSocket] = useState<boolean>(true);
     const [messages, setMessages] = useState<Array<MessageType>>([]);
     const request_input = useRef<HTMLTextAreaElement>(null);
-
+    const [selected_value, setSelectedValue] = useState<string>("Select API Call - Version 3");
     const [request, setRequest] = useState("");
     const [token, setToken] = useState<string | null>("");
-    const [selected_value, setSelectedValue] = useState<string>("Select API Call - Version 3");
 
     useEffect(() => {
         const _token = localStorage.getItem("token");
@@ -60,16 +59,19 @@ const PlayGround: React.FC = () => {
             setToken(inserted_token);
             localStorage.setItem("token", inserted_token);
             setSelectedValue("Authorize");
-            setRequest(
-                JSON.stringify(
-                    {
-                        authorize: inserted_token || token,
-                    },
-                    null,
-                    2
-                )
-            );
-            sendRequest();
+            new Promise(res => {
+                res(
+                    setRequest(
+                        JSON.stringify(
+                            {
+                                authorize: inserted_token || token,
+                            },
+                            null,
+                            2
+                        )
+                    )
+                );
+            }).then(() => sendRequest());
         },
         [token, sendRequest]
     );

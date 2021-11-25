@@ -9,13 +9,13 @@ import style from "./RequestJSONBox.module.scss";
 
 type RequestJSONBoxPropTypes = {
     request_example?: string;
-    messages: Array<MessageType>;
+    messages?: Array<MessageType>; // will be required later
     handleChange?: React.ChangeEventHandler<HTMLTextAreaElement>;
     isAppRegistration?: boolean;
-    request_input: React.RefObject<HTMLTextAreaElement>;
-    sendRequest: () => void;
-    setMessages: (message: Array<MessageType>) => void;
-    current_api: APIType;
+    request_input?: React.RefObject<HTMLTextAreaElement>; // will be required later
+    sendRequest?: () => void; // will be required later
+    setMessages?: (message: Array<MessageType>) => void; // will be required later
+    current_api?: APIType; // will be required later
 };
 
 const RequestJSONBox: React.FC<RequestJSONBoxPropTypes> = ({
