@@ -14,7 +14,9 @@ export type MessageType = {
 };
 
 type StoredData = {
-    [key: string]: string | null;
+    request: string;
+    selected_value: string;
+    token: string;
 };
 
 export const PlaygroundComponent = () => {
@@ -22,26 +24,23 @@ export const PlaygroundComponent = () => {
     const [is_initial_socket, setIsInitialSocket] = useState<boolean>(true);
     const [messages, setMessages] = useState<Array<MessageType>>([]);
     const request_input = useRef<HTMLTextAreaElement>(null);
-    const [selected_value, setSelectedValue] = useState<string>("Select API Call - Version 3");
-    const [request, setRequest] = useState("");
-    const [token, setToken] = useState<string>("");
+    const [text_data, setTextData] = useState<StoredData>({
+        request: "",
+        selected_value: "Select API Call - Version 3",
+        token: "",
+    });
 
     useEffect(() => {
-        const sessionStorage_data = Object.keys(sessionStorage).reduce((obj, key) => {
-            return { ...obj, [key]: sessionStorage.getItem(key) };
-        }, {} as StoredData);
-        setToken(() => (sessionStorage_data.token === null ? token : sessionStorage_data.token));
-        setSelectedValue(() =>
-            sessionStorage_data.selected_value === null ? selected_value : sessionStorage_data.selected_value
-        );
-        setRequest(() => (sessionStorage_data.request_body === null ? request : sessionStorage_data.request_body));
+        const sessionStorage_data = sessionStorage.getItem("session_data");
+        const session_data_object = sessionStorage_data !== null ? JSON.parse(sessionStorage_data) : text_data;
+        setTextData({ ...session_data_object });
         return () => {
             sessionStorage.clear();
-        }
+        };
     }, []);
 
     const sendRequest = React.useCallback(() => {
-        if (!request_input.current?.value && selected_value === "Select API Call - Version 3") {
+        if (!request_input.current?.value && text_data.selected_value === "Select API Call - Version 3") {
             alert("Invalid JSON!");
             return;
         }
@@ -65,40 +64,59 @@ export const PlaygroundComponent = () => {
                     setMessages([...messages, { body: _request, type: "req" }, { body: err, type: "err" }])
                 );
         setCurrentAPI(relevant_api);
-    }, [current_api, request_input, messages, is_initial_socket, selected_value]);
+    }, [current_api, request_input, messages, is_initial_socket, text_data]);
 
     const handleAuthenticateClick = React.useCallback(
         (inserted_token: string) => {
-            setToken(inserted_token);
-            sessionStorage.setItem("token", inserted_token);
-            setSelectedValue("authorize");
-            sessionStorage.setItem("selected_value", "authorize");
+            const database_authorize_request = playground_requests.find(el => el.name === "authorize");
+            const _token =
+                inserted_token ||
+                ((database_authorize_request?.body && database_authorize_request?.body.authorize) as string);
             const request_body = {
-                authorize: inserted_token || token,
+                authorize: _token,
             };
-            Promise.resolve(setRequest(JSON.stringify(request_body, null, 2))).then(() => sendRequest());
-            sessionStorage.setItem("request_body", JSON.stringify(request_body, null, 2));
+            const new_text_data = {
+                token: _token,
+                selected_value: "Authorize",
+                request: JSON.stringify(request_body, null, 2),
+            };
+            sessionStorage.setItem("session_data", JSON.stringify(new_text_data));
+            Promise.resolve(setTextData({ ...new_text_data })).then(() => {
+                sendRequest();
+            });
         },
-        [token, sendRequest]
+        [setTextData, sendRequest]
     );
 
-    const handleSelectChange: React.ChangeEventHandler<HTMLSelectElement> = React.useCallback(e => {
-        e.preventDefault();
-        const request_body = playground_requests.find(el => el.name === e.currentTarget.value);
-        setSelectedValue(e.currentTarget.value);
-        setRequest(JSON.stringify(request_body?.body, null, 4));
-        sessionStorage.setItem("selected_value", request_body?.title as string);
-        sessionStorage.setItem("request_body", JSON.stringify(request_body?.body, null, 4));
-    }, []);
+    const handleSelectChange: React.ChangeEventHandler<HTMLSelectElement> = React.useCallback(
+        e => {
+            e.preventDefault();
+            const request_body = playground_requests.find(el => el.name === e.currentTarget.value);
+            const new_text_data = {
+                ...text_data,
+                selected_value: e.currentTarget.value,
+                request: JSON.stringify(request_body?.body, null, 4),
+            };
+            setTextData({ ...new_text_data });
+            sessionStorage.setItem(
+                "session_data",
+                JSON.stringify({ ...new_text_data, selected_value: request_body?.title })
+            );
+        },
+        [text_data]
+    );
 
-    const handleTextAreaInput: React.ChangeEventHandler<HTMLTextAreaElement> = e => setRequest(e.target.value);
+    const handleTextAreaInput: React.ChangeEventHandler<HTMLTextAreaElement> = React.useCallback(
+        e => setTextData({ ...text_data, request: e.target.value }),
+        [text_data]
+    );
 
     const json_box_props = {
         current_api,
         sendRequest,
         messages,
         setMessages,
-        request_example: request,
+        request_example: text_data.request,
         handleChange: handleTextAreaInput,
         request_input,
     };
@@ -106,7 +124,7 @@ export const PlaygroundComponent = () => {
     return (
         <div className={`${style["playground-page-wrapper"]} ${style.dark}`}>
             <div className={`${style["playground-api-json"]} ${style.dark}`}>
-                <SelectRequestInput selected_value={selected_value} handleChange={handleSelectChange} />
+                <SelectRequestInput selected_value={text_data.selected_value} handleChange={handleSelectChange} />
                 <div className={`${style["api-token"]} ${style.dark}`}>
                     <TokenInputField sendTokenToJSON={handleAuthenticateClick} />
                     <div className={style["vertical-separator"]}></div>
