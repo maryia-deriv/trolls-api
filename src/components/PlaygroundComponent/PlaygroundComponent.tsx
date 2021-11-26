@@ -1,0 +1,128 @@
+import { api, APIType, generateDerivApiInstance } from "appid";
+import Title from "components/common/Title";
+import RequestJSONBox from "components/RequestJSONBox";
+import SelectRequestInput from "components/SelectRequestInput/SelectRequestInput";
+import TokenInputField from "components/TokenInputField/TokenInputField";
+import React, { useEffect, useRef, useState } from "react";
+import data_get_api_token from "utils/data-app-registration";
+import playground_requests from "utils/playground_requests";
+import style from "./PlaygroundComponent.module.scss";
+
+export type MessageType = {
+    body: string | Error | {};
+    type: string;
+};
+
+type StoredData = {
+    [key: string]: string | null;
+};
+
+export const PlaygroundComponent = () => {
+    const [current_api, setCurrentAPI] = useState<APIType>(api);
+    const [is_initial_socket, setIsInitialSocket] = useState<boolean>(true);
+    const [messages, setMessages] = useState<Array<MessageType>>([]);
+    const request_input = useRef<HTMLTextAreaElement>(null);
+    const [selected_value, setSelectedValue] = useState<string>("Select API Call - Version 3");
+    const [request, setRequest] = useState("");
+    const [token, setToken] = useState<string>("");
+
+    useEffect(() => {
+        const sessionStorage_data = Object.keys(sessionStorage).reduce((obj, key) => {
+            return { ...obj, [key]: sessionStorage.getItem(key) };
+        }, {} as StoredData);
+        setToken(() => (sessionStorage_data.token === null ? token : sessionStorage_data.token));
+        setSelectedValue(() =>
+            sessionStorage_data.selected_value === null ? selected_value : sessionStorage_data.selected_value
+        );
+        setRequest(() => (sessionStorage_data.request_body === null ? request : sessionStorage_data.request_body));
+        return () => {
+            sessionStorage.clear();
+        }
+    }, []);
+
+    const sendRequest = React.useCallback(() => {
+        if (!request_input.current?.value && selected_value === "Select API Call - Version 3") {
+            alert("Invalid JSON!");
+            return;
+        }
+        const _request = request_input.current?.value && JSON.parse(request_input.current?.value);
+        // We have to update api instance if websockets connection is closed as a result of reset:
+        let relevant_api = current_api;
+        if (current_api.connection.readyState !== 1 && is_initial_socket) {
+            relevant_api = generateDerivApiInstance();
+            setIsInitialSocket(false);
+        } else if (current_api.connection.readyState !== 1 && !is_initial_socket) {
+            relevant_api = generateDerivApiInstance();
+            setIsInitialSocket(true);
+        }
+        _request &&
+            relevant_api
+                .send(_request)
+                .then((res: string) =>
+                    setMessages([...messages, { body: _request, type: "req" }, { body: res, type: "res" }])
+                )
+                .catch((err: Error) =>
+                    setMessages([...messages, { body: _request, type: "req" }, { body: err, type: "err" }])
+                );
+        setCurrentAPI(relevant_api);
+    }, [current_api, request_input, messages, is_initial_socket, selected_value]);
+
+    const handleAuthenticateClick = React.useCallback(
+        (inserted_token: string) => {
+            setToken(inserted_token);
+            sessionStorage.setItem("token", inserted_token);
+            setSelectedValue("authorize");
+            sessionStorage.setItem("selected_value", "authorize");
+            const request_body = {
+                authorize: inserted_token || token,
+            };
+            Promise.resolve(setRequest(JSON.stringify(request_body, null, 2))).then(() => sendRequest());
+            sessionStorage.setItem("request_body", JSON.stringify(request_body, null, 2));
+        },
+        [token, sendRequest]
+    );
+
+    const handleSelectChange: React.ChangeEventHandler<HTMLSelectElement> = React.useCallback(e => {
+        e.preventDefault();
+        const request_body = playground_requests.find(el => el.name === e.currentTarget.value);
+        setSelectedValue(e.currentTarget.value);
+        setRequest(JSON.stringify(request_body?.body, null, 4));
+        sessionStorage.setItem("selected_value", request_body?.title as string);
+        sessionStorage.setItem("request_body", JSON.stringify(request_body?.body, null, 4));
+    }, []);
+
+    const handleTextAreaInput: React.ChangeEventHandler<HTMLTextAreaElement> = e => setRequest(e.target.value);
+
+    const json_box_props = {
+        current_api,
+        sendRequest,
+        messages,
+        setMessages,
+        request_example: request,
+        handleChange: handleTextAreaInput,
+        request_input,
+    };
+
+    return (
+        <div className={`${style["playground-page-wrapper"]} ${style.dark}`}>
+            <div className={`${style["playground-api-json"]} ${style.dark}`}>
+                <SelectRequestInput selected_value={selected_value} handleChange={handleSelectChange} />
+                <div className={`${style["api-token"]} ${style.dark}`}>
+                    <TokenInputField sendTokenToJSON={handleAuthenticateClick} />
+                    <div className={style["vertical-separator"]}></div>
+                    <div className={style["cta"]}>
+                        <Title headerSize="h3" className={style["title"]}>
+                            {data_get_api_token.textFocus}
+                        </Title>
+                        <div className={style["cta-button"]}>{data_get_api_token.button}</div>
+                    </div>
+                </div>
+                <RequestJSONBox {...json_box_props} />
+            </div>
+            <div id="playground" className={style["playground-api-docs"]}>
+                <div id="playground-req-schema"></div>
+                <div id="playground-res-schema"></div>
+            </div>
+        </div>
+    );
+};
