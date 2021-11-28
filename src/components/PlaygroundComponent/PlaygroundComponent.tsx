@@ -35,8 +35,8 @@ export const PlaygroundComponent = () => {
         const session_data_object = sessionStorage_data !== null ? JSON.parse(sessionStorage_data) : text_data;
         setTextData({ ...session_data_object });
         return () => {
-            setTextData((text_data: StoredData) => {
-                const data_object = { request: "", selected_value: "", token: text_data.token };
+            setTextData((relevant_text_data: StoredData) => {
+                const data_object = { request: "", selected_value: "", token: relevant_text_data.token };
                 sessionStorage.setItem("session_data", JSON.stringify(data_object));
                 return data_object;
             });

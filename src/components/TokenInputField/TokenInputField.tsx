@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { KeyboardEventHandler, useEffect, useState } from "react";
 import Button from "../common/Button/Button";
 import style from "./TokenInputField.module.scss";
 
@@ -16,7 +16,11 @@ const TokenInputField: React.FC<TokenInputFieldPropsType> = ({ isAppRegistration
         if (!_token) {
             setToken(token);
         }
-    }, [token])
+    }, [token]);
+
+    const onEnter: KeyboardEventHandler<HTMLInputElement> = e => {
+        if (e.key === "Enter") sendTokenToJSON(_token);
+    };
 
     return (
         <fieldset id="api-token-fieldset" className={style["api-token-fieldset"]}>
@@ -29,12 +33,13 @@ const TokenInputField: React.FC<TokenInputFieldPropsType> = ({ isAppRegistration
                     placeholder="API Token"
                     value={_token}
                     onChange={e => setToken(e.currentTarget.value)}
+                    onKeyPress={onEnter}
                 />
                 <Button
                     id="send-auth-manually-btn"
                     className={`${style["btn-authenticate"]} ${style.bold}`}
                     text="Authenticate"
-                    clickHandler={() => sendTokenToJSON?.(_token)}
+                    clickHandler={() => sendTokenToJSON(_token)}
                 />
             </div>
         </fieldset>
