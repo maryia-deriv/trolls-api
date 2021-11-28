@@ -36,11 +36,11 @@ export const PlaygroundComponent = () => {
         setTextData({ ...session_data_object });
         return () => {
             setTextData((text_data: StoredData) => {
-                const data_object = {request: "", selected_value: "", token: text_data.token};
+                const data_object = { request: "", selected_value: "", token: text_data.token };
                 sessionStorage.setItem("session_data", JSON.stringify(data_object));
                 return data_object;
-            })
-        }
+            });
+        };
     }, []);
 
     const sendRequest = React.useCallback(() => {
@@ -72,17 +72,10 @@ export const PlaygroundComponent = () => {
 
     const handleAuthenticateClick = React.useCallback(
         (inserted_token: string) => {
-            const database_authorize_request = playground_requests.find(el => el.name === "authorize");
-            const _token =
-                inserted_token ||
-                ((database_authorize_request?.body && database_authorize_request?.body.authorize) as string);
-            const request_body = {
-                authorize: _token,
-            };
             const new_text_data = {
-                token: _token,
+                token: inserted_token,
                 selected_value: "Authorize",
-                request: JSON.stringify(request_body, null, 2),
+                request: JSON.stringify({ authorize: inserted_token }, null, 2),
             };
             sessionStorage.setItem("session_data", JSON.stringify(new_text_data));
             Promise.resolve(setTextData({ ...new_text_data })).then(() => {
