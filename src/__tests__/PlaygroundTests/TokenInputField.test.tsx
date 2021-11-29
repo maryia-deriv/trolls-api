@@ -9,7 +9,7 @@ describe("TokenInputField", () => {
     });
 
     it("TokenInputField is rendered on Playground page", () => {
-        const result = render(<TokenInputField sendTokenToJSON={() => {}} token="user_token_1" />);
+        const result = render(<TokenInputField sendTokenToJSON={mock_on_click} token="user_token_1" />);
         fireEvent.click(result.container.querySelector("#send-auth-manually-btn") as Element);
 
         expect(result.container.querySelector(".api-token-fieldset")).toBeInTheDocument();
@@ -22,7 +22,7 @@ describe("TokenInputField", () => {
             <TokenInputField
                 isAppRegistration={true}
                 label={"Api Token"}
-                sendTokenToJSON={() => {}}
+                sendTokenToJSON={mock_on_click}
                 token={"user_token_2"}
             />
         );
