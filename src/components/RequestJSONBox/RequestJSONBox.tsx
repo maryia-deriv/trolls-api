@@ -35,7 +35,11 @@ const RequestJSONBox: React.FC<RequestJSONBoxPropTypes> = ({
     const messagesRef = useRef<HTMLDivElement | null>(null);
     useEffect(() => {
         setTimeout(() => {
-            messagesRef.current?.scrollTo(0, messagesRef.current?.scrollHeight);
+            messagesRef.current?.scrollTo({
+                top: messagesRef.current.scrollHeight,
+                left: 0,
+                behavior: "smooth",
+            });
         }, 500);
     }, [messagesRef, messages]);
 
